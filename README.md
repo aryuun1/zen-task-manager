@@ -15,7 +15,7 @@ A RESTful Task Tracker backend built with Node.js, TypeScript, Express, MongoDB,
 
 ---
 
-## Prerequisites
+## Prerequisite
 
 Make sure you have the following installed/running:
 
