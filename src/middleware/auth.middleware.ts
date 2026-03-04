@@ -28,4 +28,4 @@ const protect = async (req: Request, res: Response, next: NextFunction): Promise
     next();
 };
 
-export default protect;
+export { protect };

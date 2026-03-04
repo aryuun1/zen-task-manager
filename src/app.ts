@@ -1,5 +1,7 @@
 import express from "express";
 import authRouter from "./routes/auth.routes";
+import taskRouter from "./routes/task.routes";
+
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -13,6 +15,7 @@ app.get("/health", (_req, res) => {
 });
 
 app.use('/api/auth', authRouter);
+app.use('/api/tasks', taskRouter);
 
 
 export default app;
