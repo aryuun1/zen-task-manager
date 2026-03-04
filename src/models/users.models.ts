@@ -31,9 +31,10 @@ const userSchema = new Schema<IUser>({
     { timestamps: true });
 
 //hashing the password before saving 
-userSchema.pre("save", async function () {
+userSchema.pre('save', async function () {
     if (!this.isModified('password')) return;
-    this.password = await bcrypt.hash(this.password, 12);
+    const rounds = process.env.NODE_ENV === 'test' ? 1 : 12;
+    this.password = await bcrypt.hash(this.password, rounds);
 });
 
 //method to compare passwords

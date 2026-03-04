@@ -252,3 +252,5 @@ npm run test:coverage
 Tests use `mongodb-memory-server` (in-memory MongoDB) and mock Redis — no real DB connections needed.
 
 ---
+
+![alt text](image.png)
