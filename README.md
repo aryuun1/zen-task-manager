@@ -168,6 +168,8 @@ All task endpoints require the `Authorization: Bearer <token>` header.
 
 **Example:** `GET /api/tasks?status=pending`
 
+![GET Tasks](<designs and flows/Get.png>)
+
 ---
 
 #### POST `/api/tasks`
@@ -206,6 +208,16 @@ All task endpoints require the `Authorization: Bearer <token>` header.
 - Cache is **invalidated** on every `POST`, `PUT`, or `DELETE` task operation
 - This ensures users always get fresh data after any mutation
 
+![Cache Flow](<designs and flows/cache_flow.png>)
+
+---
+
+## Database Design
+
+![DB Design](<designs and flows/db-design.png>)
+
+![Inside Mongo](<designs and flows/inside-mongo.png>)
+
 ---
 
 ## Project Structure
@@ -239,6 +251,8 @@ This starts:
 - Redis on port `6379`
 - API server on port `3000`
 
+![Running Containers](<designs and flows/running-containers.png>)
+
 ---
 
 ## Running Tests
@@ -255,4 +269,4 @@ Tests use `mongodb-memory-server` (in-memory MongoDB) and mock Redis — no real
 
 ---
 
-![alt text](image.png)
+![alt text](coverage_score.png)
