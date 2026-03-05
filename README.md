@@ -2,6 +2,8 @@
 
 A RESTful Task Tracker backend built with Node.js, TypeScript, Express, MongoDB, and Redis.
 
+**Frontend Repository:** [zen-taskly-front](https://github.com/aryuun1/zen-taskly-front)
+
 ---
 
 ## Tech Stack
