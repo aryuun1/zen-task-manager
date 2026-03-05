@@ -3,7 +3,7 @@ import Task from '../models/task.model';
 import redisClient from '../config/redis';
 
 
-const CACHE_TTL = 60;
+const CACHE_TTL = 600;
 
 const getCacheKey = (userId: string) => `tasks:${userId}`;
 
