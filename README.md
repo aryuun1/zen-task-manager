@@ -239,19 +239,109 @@ tests/              # Jest unit + integration tests
 
 ## Docker Setup
 
-Spin up MongoDB and Redis using Docker Compose:
+The project ships with a multi-stage `Dockerfile` and a `docker-compose.yml` that orchestrates all three services — the API, MongoDB, and Redis — in one command.
+
+### Services
+
+| Service | Image | Port(s) |
+| ------- | ----- | ------- |
+| `api` | Built from `Dockerfile` (Node 18 Alpine, 2-stage) | `3000` |
+| `mongo` | `mongo:7` | `27017` |
+| `redis` | `redis/redis-stack:latest` | `6379`, `8001` (RedisInsight UI) |
+
+### Prerequisites
+
+- [Docker](https://docs.docker.com/get-docker/) installed and running
+- [Docker Compose](https://docs.docker.com/compose/install/) v2+ (bundled with Docker Desktop)
+
+### 1. Clone and enter the project
 
 ```bash
-docker-compose up -d
+git clone <your-repo-url>
+cd task-back
 ```
 
-This starts:
+### 2. Build and start all services
 
-- MongoDB on port `27017`
-- Redis on port `6379`
-- API server on port `3000`
+```bash
+docker compose up --build
+```
+
+> Use `-d` to run in detached (background) mode:
+>
+> ```bash
+> docker compose up --build -d
+> ```
+
+This will:
+
+1. Build the API image using the multi-stage `Dockerfile` (compiles TypeScript → production Node image)
+2. Pull `mongo:7` and `redis/redis-stack:latest` if not already cached
+3. Start all three containers — `task-api`, `task-mongo`, `task-redis`
+4. Wait for MongoDB and Redis health checks to pass before starting the API
+
+You should see:
+
+```text
+MongoDB connected
+Redis connected
+Server running on port 3000
+```
+
+### 3. Verify running containers
+
+```bash
+docker compose ps
+```
+
+```text
+NAME          IMAGE                      STATUS          PORTS
+task-api      task-back-api              Up              0.0.0.0:3000->3000/tcp
+task-mongo    mongo:7                    Up (healthy)    0.0.0.0:27017->27017/tcp
+task-redis    redis/redis-stack:latest   Up (healthy)    0.0.0.0:6379->6379/tcp, 0.0.0.0:8001->8001/tcp
+```
+
+### 4. Access the services
+
+| Service | URL |
+| ------- | --- |
+| API | `http://localhost:3000` |
+| MongoDB | `mongodb://localhost:27017/tasktracker2` |
+| Redis | `redis://localhost:6379` |
+| RedisInsight UI | `http://localhost:8001` |
+
+![alt text](<designs and flows/docker-compose.png>)
+
+### Useful commands
+
+```bash
+# View logs for all services
+docker compose logs -f
+
+# View logs for a specific service
+docker compose logs -f api
+docker compose logs -f mongo
+docker compose logs -f redis
+
+# Stop all services (keeps volumes/data)
+docker compose down
+
+# Stop and remove volumes (wipes all data)
+docker compose down -v
+
+# Rebuild only the API image (after code changes)
+docker compose up --build api
+```
+
+### Notes
+
+- MongoDB and Redis data are persisted in named Docker volumes (`mongo_data`, `redis_data`) so data survives container restarts.
+- The API container will not start until both MongoDB and Redis pass their health checks.
+- Environment variables are defined inline in `docker-compose.yml`. For production, replace `JWT_SECRET` with a strong random secret.
 
 ![Running Containers](<designs and flows/running-containers.png>)
+
+![Docker Compose](<designs and flows/docker-compose.png>)
 
 ---
 
